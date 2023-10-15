@@ -15,7 +15,7 @@ const Homepage = () => {
         borderRadius={"lg"}
         borderWidth={"1px"}
       >
-        <Text fontSize="4xl">Talk-A__Tive</Text>
+        <Text fontSize="4xl">Talk-A-Tive</Text>
       </Box>
       <Box
         bg={"white"}

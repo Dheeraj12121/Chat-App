@@ -7,7 +7,6 @@ import {
   InputRightElement,
   VStack,
 } from "@chakra-ui/react";
-import { NativeBuffer } from "mongoose";
 import React, { useState } from "react";
 
 const Signup = () => {
