@@ -3,26 +3,31 @@ const { chats } = require("./data/data");
 const dotenv = require('dotenv');
 const connectDB = require("./config/db");
 const colors = require('colors');
+const userRoutes = require('./routes/userRoutes')
 
 dotenv.config();
 connectDB()
 const app = express();
+app.use(express.json()) // to accept Json DATA
 
 // routes
 app.get("/", (req, res) => {
   res.send("Api is running");
 });
 
-app.get("/api/chat", (req, res) => {
-    res.send(chats)
-    // console.log(chats);
-});
+app.use('/api/user',userRoutes)
 
-app.get('/api/chat/:id',(req, res) =>{
-    // console.log(req.params.id);
-    const singleChat = chats.find((c) =>c._id === req.params.id);
-    res.send(singleChat)
-})
+// dont need
+// app.get("/api/chat", (req, res) => {
+//     res.send(chats)
+//     // console.log(chats);
+// });
+
+// app.get('/api/chat/:id',(req, res) =>{
+//     // console.log(req.params.id);
+//     const singleChat = chats.find((c) =>c._id === req.params.id);
+//     res.send(singleChat)
+// })
 
 
 // listen
