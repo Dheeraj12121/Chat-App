@@ -4,6 +4,8 @@ const dotenv = require('dotenv');
 const connectDB = require("./config/db");
 const colors = require('colors');
 const userRoutes = require('./routes/userRoutes')
+// middleware
+const { notFound, errorHandler} = require('./middleware/errorMiddleware ')
 
 dotenv.config();
 connectDB()
@@ -16,6 +18,11 @@ app.get("/", (req, res) => {
 });
 
 app.use('/api/user',userRoutes)
+
+
+app.use(notFound)
+app.use(errorHandler)
+
 
 // dont need
 // app.get("/api/chat", (req, res) => {

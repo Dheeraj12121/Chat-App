@@ -33,18 +33,18 @@ const registerUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error("Failed to create the user");
+    throw new Error("User not found");
   }
 });
 
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await User.find({ email });
+  const user = await User.findOne({ email });
 
-  if (user ) {
+  if (user && (await user.matchPassword(password))) {
     res.json({
-      id: user._id,
+      _id: user._id,
       name: user.name,
       email: user.email,
       pic: user.pic,
@@ -56,4 +56,4 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { registerUser };
+module.exports = { registerUser , authUser};
