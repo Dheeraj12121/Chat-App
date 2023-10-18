@@ -1,28 +1,26 @@
 const express = require("express");
 const { chats } = require("./data/data");
-const dotenv = require('dotenv');
+const dotenv = require("dotenv");
 const connectDB = require("./config/db");
-const colors = require('colors');
-const userRoutes = require('./routes/userRoutes')
+const colors = require("colors");
+const userRoutes = require("./routes/userRoutes");
 // middleware
-const { notFound, errorHandler} = require('./middleware/errorMiddleware ')
+const { notFound, errorHandler } = require("./middleware/errorMiddleware ");
 
 dotenv.config();
-connectDB()
+connectDB();
 const app = express();
-app.use(express.json()) // to accept Json DATA
+app.use(express.json()); // to accept Json DATA
 
 // routes
 app.get("/", (req, res) => {
   res.send("Api is running");
 });
 
-app.use('/api/user',userRoutes)
+app.use("/api/user", userRoutes);
 
-
-app.use(notFound)
-app.use(errorHandler)
-
+app.use(notFound);
+app.use(errorHandler);
 
 // dont need
 // app.get("/api/chat", (req, res) => {
@@ -36,8 +34,7 @@ app.use(errorHandler)
 //     res.send(singleChat)
 // })
 
-
 // listen
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, console.log(`server started on Port 5000 ${PORT}`.yellow.bold));
+app.listen(PORT, console.log(`server started on Port ${PORT}`.yellow.bold));
