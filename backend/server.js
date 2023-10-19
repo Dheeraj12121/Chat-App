@@ -5,7 +5,7 @@ const connectDB = require("./config/db");
 const colors = require("colors");
 const userRoutes = require("./routes/userRoutes");
 // middleware
-const { notFound, errorHandler } = require("./middleware/errorMiddleware ");
+const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 
 dotenv.config();
 connectDB();
