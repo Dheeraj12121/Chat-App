@@ -6,16 +6,53 @@ import {
   InputGroup,
   InputRightElement,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
+
 const Login = () => {
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
+  const history = useHistory();
 
   const handleClick = () => setShow(!show);
 
-  const submitHandler = () => {};
+  const submitHandler = async () => {
+    setLoading(true);
+    if (!email || !password) {
+      toast({
+        title: "Account created.",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+      return;
+
+      // console log (email passwrod)
+
+      try {
+        const config ={
+          headers: {
+            "content-type": "applicatioin/json"
+          }
+        }
+        const {data} = await axios.post(
+          "/api/user/login",
+          {email, password},
+          config
+        )
+      } catch (error) {
+        
+      }
+    }
+  };
 
   return (
     <VStack spacing={"5px"} color={"black"}>
@@ -23,6 +60,7 @@ const Login = () => {
         <FormLabel> Email </FormLabel>
         <Input
           placeholder="Enter Your E-mail"
+          value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
       </FormControl>
@@ -32,6 +70,7 @@ const Login = () => {
           <Input
             type={show ? "text" : "password"}
             placeholder="Enter Your Password"
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
 
@@ -48,6 +87,7 @@ const Login = () => {
         width={"100%"}
         style={{ marginTop: 15 }}
         onClick={submitHandler}
+        isLoading={loading}
       >
         Login
       </Button>

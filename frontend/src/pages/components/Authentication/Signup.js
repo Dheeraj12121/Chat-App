@@ -9,16 +9,19 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
+import axios from "axios";
+import{ useHistory} from 'react-router-dom'
 
 const Signup = () => {
   const [show, setShow] = useState(false);
-  const [Name, setName] = useState();
+  const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [confirmpassword, setConfirmpassword] = useState();
   const [password, setPassword] = useState();
   const [pic, setpic] = useState();
   const [loading, setLoading] = useState(false);
   const toast = useToast();
+  const history = useHistory();
 
   const handleClick = () => {
     setShow(!show);
@@ -50,11 +53,84 @@ const Signup = () => {
         .then((data) => {
           setpic(data.url.toString());
           setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
         });
+    } else {
+      toast({
+        title: "Please Select an Image",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+      return;
     }
   };
 
-  const submitHandler = () => {};
+  const submitHandler = async () => {
+    setLoading(true);
+    if (!name || !email || !password || !confirmpassword) {
+      toast({
+        title: "Please Select an Image",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+      return;
+    }
+    if (password !== confirmpassword) {
+      toast({
+        title: "Please Select an Image",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      return;
+    }
+
+    try {
+      const config = {
+        headers: {
+          "content-type": "application/json",
+        },
+      };
+      const { data } = await axios.post("/api/user", {
+        name,
+        email,
+        password,
+        pic,
+      },config);
+      toast({
+        title: "Registration Successful",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+
+      localStorage.setItem('userInfo',JSON.stringify(data));
+      setLoading(false)
+      history.push('/chat')
+    } catch (error) {
+
+      toast({
+        title: "Error Occured",
+        description: error.response.data.message,
+        status: "errr",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+    }
+  };
+
   return (
     <VStack spacing={"5px"} color={"black"}>
       <FormControl id="first-name">
@@ -103,6 +179,7 @@ const Signup = () => {
         width={"100%"}
         style={{ marginTop: 15 }}
         onClick={submitHandler}
+        isLoading={loading}
       >
         Sign Up
       </Button>

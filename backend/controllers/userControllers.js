@@ -50,16 +50,26 @@ const authUser = asyncHandler(async (req, res) => {
       pic: user.pic,
       token: generateToken(user._id),
     });
-  }else{
-    res.status(401)
-    throw new Error("Invalid Email or password")
+  } else {
+    res.status(401);
+    throw new Error("Invalid Email or password");
   }
 });
 
+// /api/user?variable=dheeraj
+// /api/:id?=dheeraj
+const allUsers = asyncHandler(async (req, res) => {
+  const keyword = req.query.search
+    ? {
+        $or: [
+          { name: { $regex: req.query.search, $options: "i" } },
+          { email: { $regex: req.query.search, $options: "i" } },
+        ],
+      }
+    : {};
 
-// /api/user
-const allUsers = asyncHandler(async(req, res) =>{
+  const users = await User.find(keyword).find({ id: { $ne: req.user._id } });
+  res.send(users)
+});
 
-})
-
-module.exports = { registerUser , authUser};
+module.exports = { registerUser, authUser, allUsers };
