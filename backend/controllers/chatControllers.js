@@ -34,11 +34,20 @@ const accessChat = asyncHandler(async (req, res) => {
     };
 
     try {
-        const createdChat = await Chat.create(chatData)
+      const createdChat = await Chat.create(chatData);
 
-        const FullChat = 
+      const FullChat = await Chat.findOne({ _id: createdChat.id }).populate(
+        "users",
+        "-password"
+      );
+
+      res.status(200).send(FullChat)
     } catch (error) {
-        
+        res.status(400)
+        throw new Error(error.message)
     }
   }
 });
+
+
+module.exports = {accessChat}
