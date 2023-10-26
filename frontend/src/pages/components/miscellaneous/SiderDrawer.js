@@ -19,6 +19,7 @@ import { ChatState } from "../../Context/ChatProvider";
 import ProfileModal from "./ProfileModal";
 import { useHistory } from "react-router-dom";
 import { useDisclosure } from "@chakra-ui/hooks";
+import ChatLoading from "../ChatLoading";
 
 const SiderDrawer = () => {
   const [search, setSearch] = useState("");
@@ -36,44 +37,47 @@ const SiderDrawer = () => {
     history.push("/");
   };
 
+  const toast = useToast();
 
-  const toast = useToast()
-
-  // handle search empty serch 
-  const handleSearch = async () =>{
-    if(!search){
+  // handle search empty serch
+  const handleSearch = async () => {
+    if (!search) {
       toast({
-        title:'Please Enter something in search',
-        status:"warning",
-        duration:5000,
-        isClosable:true,
-        position:"top-left"
-      })
-      return
+        title: "Please Enter something in search",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "top-left",
+      });
+      return;
     }
     try {
-      setLoading(true)
+      setLoading(true);
 
       const config = {
-        headers:{
-          Authorization:`Bearer ${user.token}`
+        headers: {
+          Authorization: `Bearer ${user.token}`,
         },
       };
 
-      const {data} = await axios.get(`/api/user?search=${search}`,config)
+      const { data } = await axios.get(`/api/user?search=${search}`, config);
 
-      setLoading(false)
+      setLoading(false);
     } catch (error) {
       toast({
-        title:'Error Occured!',
-        description:"Failed to Load the Search Results",
-        status:"error",
-        duration:5000,
-        isClosable:true,
-        position:"bottom-left"
-      })
+        title: "Error Occured!",
+        description: "Failed to Load the Search Results",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
     }
-  }
+  };
+
+  const accessChat = (userId) => {
+    
+  };
 
   return (
     <>
@@ -135,6 +139,17 @@ const SiderDrawer = () => {
               />
               <Button onClick={handleSearch}>Go</Button>
             </Box>
+            {loading ? (
+              <ChatLoading />
+            ) : (
+              searchResult?.map((user) => (
+                <UserListItem
+                  key={user._id}
+                  user={user}
+                  handleFunction={() => accessChat(user._id)}
+                />
+              ))
+            )}
           </DrawerBody>
         </DrawerContent>
       </Drawer>
