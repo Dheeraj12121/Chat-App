@@ -64,11 +64,13 @@ const MyChats = () => {
         alignItems="center"
       >
         My Chats
-        <Button
-          d="flex"
-          fontSize={{ base: "17px", md: "10px", lg: "17px" }}
-          rightIcon={<AddIcon />}
-        ></Button>
+        <GroupChatModal>
+          <Button
+            d="flex"
+            fontSize={{ base: "17px", md: "10px", lg: "17px" }}
+            rightIcon={<AddIcon />}
+          ></Button>
+        </GroupChatModal>
       </Box>
 
       <Box
@@ -81,26 +83,30 @@ const MyChats = () => {
         borderRadius={"lg"}
         overflow={"hidden"}
       >
-        {chats ? <Stack overflowY={'scroll'}>
-
-          {chats.map((chat)=>(
-            <Box
-            onClick={() => setSelectedChat(chat)}
-            cursor={'pointer'}
-            bg={selectedChat === chat ? '#38B2AC' : '#E8E8E8'}
-            color={selectedChat === chat ? 'white' : "black"}
-            px={3}
-            py={2}
-            borderRadius={'lg'}
-            key={chat._id}
-            >
-
-              <Text>
-                {!chat.isGroupChat ? getSender(loggedUser, chat.users) : chat.chatName}
-              </Text>
-            </Box>
-          ))}
-        </Stack> : <ChatLoading />}
+        {chats ? (
+          <Stack overflowY={"scroll"}>
+            {chats.map((chat) => (
+              <Box
+                onClick={() => setSelectedChat(chat)}
+                cursor={"pointer"}
+                bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
+                color={selectedChat === chat ? "white" : "black"}
+                px={3}
+                py={2}
+                borderRadius={"lg"}
+                key={chat._id}
+              >
+                <Text>
+                  {!chat.isGroupChat
+                    ? getSender(loggedUser, chat.users)
+                    : chat.chatName}
+                </Text>
+              </Box>
+            ))}
+          </Stack>
+        ) : (
+          <ChatLoading />
+        )}
       </Box>
     </Box>
   );
