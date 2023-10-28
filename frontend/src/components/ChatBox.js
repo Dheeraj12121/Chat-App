@@ -2,7 +2,7 @@ import React from 'react'
 import {ChatState} from '../Context/ChatProvider'
 import { Box } from '@chakra-ui/react';
 
-const ChatBox = () => {
+const ChatBox = ({fetchAgain,setFetchAgian}) => {
 
   const {selectedChat} = ChatState();
 
@@ -17,7 +17,9 @@ const ChatBox = () => {
     w={{base:"100%",md:"68%"}}
     borderRadius='lg'
     borderWidth='1px'
-    >ChatBox</Box>
+    >
+      <SingleChat/>
+    </Box>
   )
 }
 

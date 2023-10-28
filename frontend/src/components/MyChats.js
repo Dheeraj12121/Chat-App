@@ -9,7 +9,7 @@ import GroupChatModal from "./miscellaneous/GroupChatModal";
 import { Button } from "@chakra-ui/react";
 import { ChatState } from "../Context/ChatProvider";
 
-const MyChats = () => {
+const MyChats = ({fetchAgain}) => {
   const [loggedUser, setLoggedUser] = useState();
   const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
 
@@ -26,7 +26,13 @@ const MyChats = () => {
       const { data } = await axios.get("/api/chat", config);
       console.log(data);
       setChats(data);
-    } catch (error) {
+    } catch (error) {toast({
+        title:"Please fill all the feilds",
+        status:"warning",
+        duration: 5000,
+        isClosable: true,
+        position:"top"
+      })
       toast({
         title: "Error Occured!",
         description: "Failed to Load the chats",
@@ -41,7 +47,7 @@ const MyChats = () => {
   useEffect(() => {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
-  }, []);
+  }, [fetchAgain]);
   return (
     <Box
       d={{ base: selectedChat ? "none" : "flex", md: "flex" }}
