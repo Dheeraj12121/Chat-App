@@ -58,8 +58,52 @@ const GroupChatModal = ({}) => {
     }
   };
 
-  const handleSubmit = (delUser) => {
-    setSelectedUsers(selectedUser.filter(sel => selectedUsers._id !==delUser._id))
+  const handleSubmit = async () => {
+    if(!groupChatName || !selectedUsers){
+      toast({
+        title:"Please fill all the feilds",
+        status:"warning",
+        duration: 5000,
+        isClosable: true,
+        position:"top"
+      })
+      return;
+    }
+    try {
+      const config ={
+        headers:{
+          Authorization: `Bearer ${user.token}`
+        },
+      }
+
+      const {data} = await axios.post('/api/chat/group',{
+        name:groupChatName,
+        users: JSON.stringify(selectedUsers.map((u)=> u._id))
+      },
+      config
+      )
+
+      setChats([data,...chats])
+      onClose();
+      toast({
+        title:"New Group Chat Created",
+        status:"Success",
+        duration: 5000,
+        isClosable: true,
+        position:"bottom"
+      })
+      
+
+    } catch (error) {
+      toast({
+        title:"Failed to Create the Chat!",
+        description: error.response.data,
+        status:"warning",
+        duration: 5000,
+        isClosable: true,
+        position:"top"
+      })
+    }
   };
 
   const handleGroup = (userToAdd) => {
@@ -75,7 +119,9 @@ const GroupChatModal = ({}) => {
     setselectedUsers([...selectedUsers, userToAdd]);
   };
 
-  const handleDelete = () => {};
+  const handleDelete = (delUser) => {
+    selectedUsers(selectedUser.filter((sel)=>selectedUser._id !== delUser._id))
+  };
 
   return (
     <>
