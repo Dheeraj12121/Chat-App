@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ChatState } from "../Context/ChatProvider";
 import {
   Box,
@@ -23,6 +23,40 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const toast = useToast();
   const { user, selectedChat, setSelectedChat } = ChatState();
 
+
+  const fetchMessages = async() =>{
+    if(!selectedChat) return;
+
+    try {
+        const config = {
+            headers:{
+                'Content-Type':'application/json',
+                Authorization: `Bearer ${user.token}`,
+            }
+        }
+
+        setLoading(true)
+        const {data} = await axios.get(`/api/message/${selected._id}`,
+        config)
+
+        setMessages(data)
+        setLoading(false)
+    } catch (error) {
+        toast({
+            title: "Error Occured!",
+            description: "Failed to Load the Messages",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+            position: "button",
+          });
+    }
+  }
+
+  useEffect(() =>{
+    fetchMessages();
+  },[selectedChat])
+
   const sendMessage = async (event) => {
     if (event.key === "Enter" && newMessage) {
       try {
@@ -33,6 +67,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           },
         };
 
+        setNewMessage("");
         const { data } = await axios.post(
           `/api/message`,
           {
@@ -43,11 +78,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         );
 
         console.log(data);
-
-        setNewMessage("");
         setMessages([...Messages, data]);
       } catch (error) {
-        Toast({
+        toast({
           title: "Error Occured!",
           description: "Failed to send the Message",
           status: "error",
