@@ -1,72 +1,75 @@
-import React from 'react'
-import { ChatState } from '../Context/ChatProvider'
-import { Box, IconButton, Text } from '@chakra-ui/react'
-import { ArrowBackIcon } from '@chakra-ui/icons'
-import {getSender, getSenderFull} from '../config/ChatLogics'
-import ProfileMode from './miscellaneous/ProfileModal'
-import UpdateGroupChatModal from './miscellaneous/UpdateGroupChatModal'
+import React from "react";
+import { ChatState } from "../Context/ChatProvider";
+import { Box, IconButton, Text } from "@chakra-ui/react";
+import { ArrowBackIcon } from "@chakra-ui/icons";
+import { getSender, getSenderFull } from "../config/ChatLogics";
+import ProfileMode from "./miscellaneous/ProfileModal";
+import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
 
-const SingleChat = ({fetchAgain, setFetchAgain}) => {
+const SingleChat = ({ fetchAgain, setFetchAgain }) => {
+  const [Messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [newMessage, setNewMessage] = useState();
 
-    const{user,selectedChat, setSelectedChat} = ChatState()
+  const { user, selectedChat, setSelectedChat } = ChatState();
   return (
     <>
-        {selectedChat ?(
-            <>
-                <Text
-                fontSize={{base:"28px",md:"30px"}}
-                pb={3}
-                px={2}
-                w={'100%'}
-                fontFamily={'Work sans'}
-                d='flex'
-                justifyContent={{base:"space-between"}}
-                alignItems={'center'}
-                >
-                    <IconButton
-                        d={{base:'felx', md:"none"}}
-                        icon={<ArrowBackIcon/>}
-                       onClick={()=> setSelectedChat("")}
-                    />
-                    {!selectedChat.isGroupChat?(
-                        <>
-                            {getSender(user, selectedChat.users)}
-                            <ProfileModel user={getSenderFull(user, selectedChat.usrs)}/>
-                        </>
-                        ):(
-                            <>
-                            {selectedChat.chatName.toUpperCase()}
-                            <UpdateGroupChatModal
-                                fetchAgain={fetchAgain}
-                                setFetchAgain={setFetchAgain}
-                            />
-                            </>
-                        )}
-                </Text>
-
-                <Box
-                d='flex'
-                flexDir={'column'}
-                justifyContent={'flex-end'}
-                p={3}
-                bg='#E8E8E8'
-                w={'100%'}
-                h={'100%'}
-                borderRadius='lg'
-                overflow={'hidden'}
-
-                >
-                    {/* Messages Here */}
-                </Box>
-            </>) :(
-                <Box  d="flex" alignItems="center" justifyContent="center" h="100%">
-                    <Text fontSize="3xl" pd={3} fontFamily="Work sans">
-                        Click on a user to start chatting
-                    </Text>
-                </Box>
+      {selectedChat ? (
+        <>
+          <Text
+            fontSize={{ base: "28px", md: "30px" }}
+            pb={3}
+            px={2}
+            w={"100%"}
+            fontFamily={"Work sans"}
+            d="flex"
+            justifyContent={{ base: "space-between" }}
+            alignItems={"center"}
+          >
+            <IconButton
+              d={{ base: "felx", md: "none" }}
+              icon={<ArrowBackIcon />}
+              onClick={() => setSelectedChat("")}
+            />
+            {!selectedChat.isGroupChat ? (
+              <>
+                {getSender(user, selectedChat.users)}
+                <ProfileModel user={getSenderFull(user, selectedChat.usrs)} />
+              </>
+            ) : (
+              <>
+                {selectedChat.chatName.toUpperCase()}
+                <UpdateGroupChatModal
+                  fetchAgain={fetchAgain}
+                  setFetchAgain={setFetchAgain}
+                />
+              </>
             )}
-    </>
-  )
-}
+          </Text>
 
-export default SingleChat
+          <Box
+            d="flex"
+            flexDir={"column"}
+            justifyContent={"flex-end"}
+            p={3}
+            bg="#E8E8E8"
+            w={"100%"}
+            h={"100%"}
+            borderRadius="lg"
+            overflow={"hidden"}
+          >
+            {/* Messages Here */}
+          </Box>
+        </>
+      ) : (
+        <Box d="flex" alignItems="center" justifyContent="center" h="100%">
+          <Text fontSize="3xl" pd={3} fontFamily="Work sans">
+            Click on a user to start chatting
+          </Text>
+        </Box>
+      )}
+    </>
+  );
+};
+
+export default SingleChat;
