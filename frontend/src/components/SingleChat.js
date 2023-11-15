@@ -14,6 +14,7 @@ import { getSender, getSenderFull } from "../config/ChatLogics";
 import ProfileMode from "./miscellaneous/ProfileModal";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
 import axios from "axios";
+import './styles.css';
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [Messages, setMessages] = useState([]);

@@ -1,0 +1,7 @@
+.messages{
+    display: flex;
+    flex-direction: column;
+    overflow-y:none ;
+    scrollbar-width:none;
+}
+/* long time no see */
